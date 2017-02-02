@@ -1,0 +1,35 @@
+// Simulation_Level = Estimation/Behavior/Circuit
+// Target_Outputs = Area/Latency/Power for estimation
+// Target_Outputs = Voltage/Current/Resistence/Function for behavior & circuit
+
+Simulation_Level Estimation
+
+Target_Outputs Area
+
+Application ANN
+
+Application_Scale 16
+
+Network_Scale 9 64 576 64 576 128 1152 128 1152 256 2304 256 2304 256 2304 512 4608 512 4608 512 4608 512 4608 512 4608 512 25088 4096 4096 4096 4096 1000
+
+Weight_Polarity 2
+
+% Parameters
+
+Cell_Type 1T1R
+
+RRAM_Model ideal
+
+RRAM_Bit_Levels 8
+
+Transistor_Tech(nm) 130
+
+Min_Crossbar_Size 4
+
+Max_Crossbar_Size 1024
+
+Write_Method ideal
+
+Line_Tech 22
+
+Action_Type Calculation
