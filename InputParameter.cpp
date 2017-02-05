@@ -1,5 +1,4 @@
 #include "InputParameter.h"
-#include<iostream>
 #include<fstream>
 #include<string>
 #include <sstream>
@@ -25,6 +24,15 @@ InputParameter::InputParameter() {
 	maxAdder = 0;
 	minLine = 22;
 	maxLine = 90;
+
+	//load tech
+	tech = TranTech;
+    count = 1;
+    minarea = 8e10;
+    minenergy = 8e10;
+    minpower = 8e10;
+    minlatency = 8e10;
+    minerr = 8e10;
 }
 InputParameter::~InputParameter() {
 	// TODO Auto-generated destructor stub

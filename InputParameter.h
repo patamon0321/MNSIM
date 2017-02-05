@@ -34,6 +34,13 @@ public:
 	int minLine;
 	int maxLine;
 	int *NetScale;
+	int tech;
+	int count;
+	double minarea;
+	double minenergy;
+	double minpower;
+	double minlatency;
+	double minerr;
 	string SimLv;
     string Target_Output;
 	string Application;
