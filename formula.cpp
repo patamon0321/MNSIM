@@ -1,5 +1,18 @@
 #include"formula.h"
+#include"global.h"
 #include<math.h>
+int control;
+double input_sig;
+double output_neighbor;
+double output_sig;
+double signalsize;
+int netcolumn;
+int netrow;
+double bandwidth;
+double flags[4];
+double adders_area,neuron_area,area_p;
+double adders_latency,neuron_latency,pulse_latency,latency_p;
+double adders_power,neuron_power,power_p;
 void determin_sig(int xbarsize,int adderposition,int sig_bit,int cell_bit,int adposition){
 	control = 2 ; //如果adder在里边，表示需要额外输入一列信号，输出一列信号
     input_sig = 2*(log((double)xbarsize)/log(2.0)) + sig_bit*xbarsize + control+ adderposition * (sig_bit+cell_bit);
@@ -120,4 +133,96 @@ double readsize(int tech){
 }
 double writesize(int tech,int celltype){
 	return (tech * 1e-9)*(tech * 1e-9) *18 *2;
+}
+double cal_xbar_l(int tech,int celltype,int xbarsize,int action_type){
+	return 100e-9;
+}
+double cal_ad_l(int tech,int sig_bit){
+	return 0.667e-9;
+}
+double cal_da_l(int tech,int sig_bit){
+	return 1/(960e6);
+}
+double cal_adder_l(int tech,int sig_bit){
+	return 1e-9;
+}
+double cal_decoder_l(int tech,int xbarsize,int celltype,int action_type){
+	return 1e-8;
+}
+double cal_read_l(int tech,int xbarsize,int action_type){
+	return 168.96e-9;
+}
+double cal_xbar_p(int tech,int celltype,int xbarsize,double resis_range,int action_type){
+	double voltage = 0.1;
+    double cell_r_p = voltage*voltage /10e3;		//		(2/(1/resis_range(1) + 1/resis_range(2)));
+//     0.1*0.1/(500+2.9732*64+1.3*90/130*Rn/0.9+1.3*90/130/0.9*Rn*Rp/(Rn+Rp))*128*128+0.0024;
+    if (action_type == 2)
+        return cell_r_p * xbarsize*xbarsize;
+}
+void cal_adder_p(int tech,int sig_bit){
+	adder_power = 0.1e-3;
+    adder_leak = 0;
+}
+double cal_ad_p(int tech,int sig_bit){
+	return 0.26e-3;
+}
+double cal_da_p(int tech,int sig_bit){
+	return 55e-6;
+}
+double cal_decoder_p(int tech,int celltype,int xbarsize,int action_type){
+	return 0;
+}
+void periphery_area(int tech,int xbarsize,int netrow,int netcolumn,int adderposition,int pulseposition,int sig_bit,int application){
+	if (adderposition == 0) // 在外边统一加
+        adders_area = addersize(tech,sig_bit) * (netrow-1) * netcolumn *xbarsize;
+    else
+        adders_area = 0;
+    neuron_area = neuronsize(tech,sig_bit,application) * xbarsize * netcolumn;
+    pulse_area = (1-pulseposition) * pulsesize(tech);
+    area_p = adders_area + neuron_area + pulse_area;
+    flags[0]= 1;
+}
+double neuronsize(int tech,int sig_bit,int application){
+	if(tech<0)
+        return (tech * 1e-9)*(tech * 1e-9)* 18  * 20;
+    else
+        if (application == 0)
+           return adsize(tech,sig_bit) + 15e-6 * 18e-6 * (tech/130)*(tech/130)+ dasize(tech,sig_bit);
+        else
+           return (tech * 1e-9)*(tech * 1e-9) * 6 * 20+ dasize(tech,sig_bit);
+}
+void periphery_latency_c(int tech,int netrow,int adderposition,int pulseposition,int sig_bit,int application){
+	if (adderposition == 0) // 在外边统一加
+        adders_latency = cal_adder_l(tech,sig_bit) * ceil(log((double)netrow)/log(2.0));
+    else
+        adders_latency = 0;
+    neuron_latency = cal_neuron_l(tech,sig_bit,application);
+    pulse_latency = (1-pulseposition) * 1.6e-9;
+    latency_p = adders_latency + neuron_latency + pulse_latency;
+    flags[0] = 1;
+}
+double cal_neuron_l(int tech,int sig_bit,int application){
+	if (application == 0)
+        return cal_ad_l(tech,sig_bit) + 6e-8 + cal_da_l(tech,sig_bit);
+    else
+        return 6e-8+ cal_da_l(tech,sig_bit);
+}
+void periphery_power_c(int tech,int xbarsize,int netrow,int netcolumn, int adderposition,int pulseposition,int sig_bit,int application,double adders_latency,double neuron_latency,double pulse_latency){
+	if (adderposition == 0){ // 在外边统一加
+        adder_act=0.1e-3;adder_leak= 0;
+        adders_power = (adder_act * (netrow-1) * netcolumn) ;//*adders_latency ;//+adder_leak* (netrow-1) * netcolumn*(neuron_latency+pulse_latency))/(adders_latency + neuron_latency + pulse_latency) ;
+	}
+	else
+        adders_power = 0;
+    neuron_power = cal_neuron_p(tech,sig_bit,application) * xbarsize * netcolumn;
+//     neuron_power = neuron_power * neuron_latency/(adders_latency + neuron_latency + pulse_latency);
+    pulse_power = (1-pulseposition) * 11.6e-3;// *pulse_latency/(adders_latency + neuron_latency + pulse_latency);
+    power_p = adders_power + neuron_power + pulse_power;
+    flags[0] = 1;
+}
+double cal_neuron_p(int tech,int sig_bit,int application){
+	if (application == 0)
+        return cal_ad_p(tech,sig_bit) + 0 + cal_da_p(tech,sig_bit);
+    else
+        return 1.5e-3+ cal_da_p(tech,sig_bit);
 }
