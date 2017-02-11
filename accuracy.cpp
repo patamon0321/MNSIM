@@ -1,8 +1,9 @@
 #include"global.h"
 #include"function.h"
 #include"formula.h"
+#include<math.h>
 double accuracy, d1;
-void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_range,int input_err){
+void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_range,double input_err){
 	double cc[4] = {-0.005376,1.278,8.957,1.451e-6};
 	double rline[5] = {0,12.681000000000000,6.607000000000000,3.928000000000000,2.177000000000000};
 	double a =      -1.113  ;
@@ -33,6 +34,11 @@ void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_ran
     accuracy = (1+y0)*(1+input_err)-1;
     //a = 0:2^sig_bit-1;
     //d1 = sum(floor(a*accuracy+0.5))/2^sig_bit/(2^sig_bit-1);  另一种精确度
+	double sum=0;
+	for(double i=0;i<=sig_bit*sig_bit-1;i++){
+		sum=sum+floor(i*accuracy+0.5);
+	}
+	d1=sum/(sig_bit*sig_bit)/(sig_bit*sig_bit-1);
     
 //     c(1)+c(2)./(c(3)+xbarsize) + c(4)*xbarsize^2 .*r_line;
 //    flags = 1;

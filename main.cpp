@@ -13,16 +13,9 @@ using namespace std;
 
 InputParameter *inputParameter;
 int count = 1;
-double minarea = 8e10;
-double minenergy = 8e10;
-double minpower = 8e10;
-double minlatency = 8e10;
-double minerr = 8e10;
 double area,area_flags,latency,latency_multi,power_multi,power_flags,area_multi,power,energy,application,action_type,target;
-double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][18];
-int layer_computation_times[] = {49284,49284,12100,12100,2916,2916,2916,676,676,676,144,144,144,1,1,1};
-double mintarget[8]={0,minarea,minenergy,minlatency,minerr,minpower},AAAestrslt[1100][18];
-int mincount[6];
+double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][19],AAAestrslt[1100][19];
+int mincount[7];
 double tech;
 int err_count;
 
@@ -31,7 +24,8 @@ int main()
 	clock_t tic,toc;
 	tic=clock();
 	inputParameter = new InputParameter();
-	tech = inputParameter->TranTech;
+
+	//read configs  &  init configs
 	inputParameter->ReadInputParameterFromFile();
 	if (inputParameter->Application[0] == 'a' ||inputParameter->Application[0] == 'A')
         application = 0;
@@ -39,6 +33,8 @@ int main()
         application = 1;
 	if (inputParameter->Action_type[0] == 'c' || inputParameter->Action_type[0] == 'C') //calculate phase
        action_type = 2;
+
+	//Behavior level estimation
 	switch (inputParameter->Target_Output[0]){
 		case 'a':
 				target = 1;break;
@@ -53,6 +49,17 @@ int main()
 		case 'L':
 				target = 3;break;
 	}
+
+	//  load tech
+	int tech = inputParameter->TranTech;
+    double minarea = 8e10;
+    double minenergy = 8e10;
+    double minpower = 8e10;
+    double minlatency = 8e10;
+    double minerr = 8e10;
+	double mintarget[8]={0,0,minarea,minenergy,minlatency,minerr,minpower};
+	double input_err[200]={0};
+
     for (double adposition=max(0,inputParameter->minAdPos);adposition<=min(1,inputParameter->maxAdPos);adposition++)
         for (double bit_level = max(0,inputParameter->minBtLv);(bit_level<=min(16,inputParameter->maxBtLv));bit_level++)
 //             for min_resis_range = 500:500:1e3
@@ -72,8 +79,7 @@ int main()
                                 for (double read_sep = 1;read_sep<=128;read_sep++)//xbarsize/128 : xbarsize/128 : xbarsize%8:8:xbarsize
                                     if (xbarsize<inputParameter->minXbarSize || xbarsize > inputParameter->maxXbarSize)
                                         cout<<"error:xbarsize over the limit"<<endl;
-                                    else{
-										double input_err[200]={0};
+                                    else
 										for (double netlevel = 1;netlevel<=inputParameter->AppScale;netlevel++){ //-1
 											if (bit_level != 0)
 												cell_bit = bit_level;
@@ -105,6 +111,7 @@ int main()
 											area_multi = area_u * netrow * netcolumn;
 											power = power_u  * netrow * netcolumn + power_l  + power_p ;
 											energy = power * latency;
+											//将结果存储到AAestrslt,与matlab版相比，缺少了matlab版本的第7个元素d1
 											equal(netlevel,area,energy,latency,power,accuracy,area_multi,power_multi,latency_multi,read_sep,adposition,bit_level,adderposition,pulseposition,linetech,celltype,xbarsize);
 
 											if (accuracy < minerr){
@@ -113,22 +120,26 @@ int main()
 											}
 											count = count + 1;
 										}
-									}
+									
 						}
-    int design_space = count/inputParameter->AppScale;    
+
+	int layer_computation_times[] = {49284,49284,12100,12100,2916,2916,2916,676,676,676,144,144,144,1,1,1};
+
+    double design_space = count/inputParameter->AppScale;    
+
 	for (int temp_count = 1;temp_count<=design_space;temp_count++){
 		for(int netlevel_temp=1;netlevel_temp<=inputParameter->AppScale;netlevel_temp++){
-			for(int i=1;i<=16;i++)
+			for(int i=1;i<=18;i++)
 				AAAestrslt[temp_count][i] = AAAestrslt[temp_count][i]+AAestrslt[((temp_count-1) * inputParameter->AppScale +netlevel_temp)][i];
-			AAAestrslt[temp_count][3] =AAAestrslt[temp_count][3] + AAestrslt[((temp_count-1) * inputParameter->AppScale +netlevel_temp)][3]*(layer_computation_times[netlevel_temp]-1);
+			AAAestrslt[temp_count][3] =AAAestrslt[temp_count][3] + AAestrslt[((temp_count-1) * inputParameter->AppScale +netlevel_temp)][3]*(layer_computation_times[netlevel_temp-1]-1);
 		}
                                         
 		//AAAestrslt(temp_count,3) =AAestrslt(((temp_count-1) * AppScale +1),3)*layer_computation_times(1);
-		AAAestrslt[temp_count][4] = AAAestrslt[temp_count][4]/inputParameter->AppScale;
-		AAAestrslt[temp_count][6] = AAAestrslt[temp_count][6]/inputParameter->AppScale;
-		AAAestrslt[temp_count][7] = AAAestrslt[temp_count][7]/inputParameter->AppScale;
-		for(int i=10;i<=16;i++)
-			AAAestrslt[temp_count][i] = AAAestrslt[temp_count][i]/inputParameter->AppScale;
+		AAAestrslt[temp_count][4] = AAAestrslt[temp_count][4]/(double)inputParameter->AppScale;
+		AAAestrslt[temp_count][6] = AAAestrslt[temp_count][6]/(double)inputParameter->AppScale;
+		AAAestrslt[temp_count][7] = AAAestrslt[temp_count][7]/(double)inputParameter->AppScale;
+		for(int i=10;i<=18;i++)
+			AAAestrslt[temp_count][i] = AAAestrslt[temp_count][i]/(double)inputParameter->AppScale;
 
 		AAAestrslt[temp_count][4] = max1(((temp_count-1) * inputParameter->AppScale+1),((temp_count-1) * inputParameter->AppScale+inputParameter->AppScale),4);
 
@@ -140,15 +151,19 @@ int main()
                 mincount[target_tt] = temp_count;
 			}
 	}
+
+
 	double optresult[10][18];
 	if (count>2){
 		for(int i=2;i<=6;i++)
-			for(int j=1;j<=16;j++)
-				optresult[i-1][j] = AAAestrslt[mincount[i]][j];
+			for(int j=2;j<=18;j++)
+				optresult[i-1][j-1] = AAAestrslt[mincount[i]][j];
 		for(int i=1;i<=5;i++)
 			for(int j=1;j<=3;j++)
 				optresult[i][j] = optresult[i][j]*1e6;	
 	}
+
+
 	toc=clock();
     cout<<"Run time: "<<(double)(toc-tic)/CLOCKS_PER_SEC<<"S"<<endl;
 	delete inputParameter;
@@ -156,23 +171,24 @@ int main()
 }
 
 void equal(double netlevel,double area,double energy,double latency,double power,double accuracy,double area_multi,double power_multi,double latency_multi,double read_sep,double adposition,double bit_level,double adderposition,double pulseposition,double linetech,double celltype,double xbarsize){
-	AAestrslt[count][0] = netlevel;
-	AAestrslt[count][1] = area;
-	AAestrslt[count][2] = energy;
-	AAestrslt[count][3] = latency;
-	AAestrslt[count][4] = power;
-	AAestrslt[count][5] = accuracy;
-	AAestrslt[count][6] = area_multi;
-	AAestrslt[count][7] = power_multi;
-	AAestrslt[count][8] = latency_multi;
-	AAestrslt[count][9] = read_sep;
-	AAestrslt[count][10] = adposition;
-	AAestrslt[count][11] = bit_level;
-	AAestrslt[count][12] = adderposition;
-	AAestrslt[count][13] = pulseposition;
-	AAestrslt[count][14] = linetech;
-	AAestrslt[count][15] = celltype;
-	AAestrslt[count][16] = xbarsize;
+	AAestrslt[count][1] = netlevel;
+	AAestrslt[count][2] = area;
+	AAestrslt[count][3] = energy;
+	AAestrslt[count][4] = latency;
+	AAestrslt[count][5] = power;
+	AAestrslt[count][6] = accuracy;
+	AAestrslt[count][7] = d1;
+	AAestrslt[count][8] = area_multi;
+	AAestrslt[count][9] = power_multi;
+	AAestrslt[count][10] = latency_multi;
+	AAestrslt[count][11] = read_sep;
+	AAestrslt[count][12] = adposition;
+	AAestrslt[count][13] = bit_level;
+	AAestrslt[count][14] = adderposition;
+	AAestrslt[count][15] = pulseposition;
+	AAestrslt[count][16] = linetech;
+	AAestrslt[count][17] = celltype;
+	AAestrslt[count][18] = xbarsize;
 }
 double max1(int a,int b,int c){
 	double i;
@@ -180,7 +196,7 @@ double max1(int a,int b,int c){
 	i=AAestrslt[b][4];
 	for(j=b;j<a;j++)
 		if(AAestrslt[j][4]>i)
-			i=AAestrslt[j][4]>i;
+			i=AAestrslt[j][4];
 	return i;
 }
 
