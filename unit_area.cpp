@@ -2,10 +2,10 @@
 #include"global.h"
 #include"function.h"
 double xbar_area,techwl,ad_area,da_area,adder_area,pulse_area,decoder_area,read_area,write_area,Sub_area,area_u;
-void unit_area_c(int tech,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int sig_bit,int application,int rramtech,int read_seperate){
+void unit_area_c(int tech,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int sig_bit,int application,double rramtech,int read_seperate){
 	if (read_seperate == 0){
 		if (celltype == 0)
-			xbar_area = xbarsize^2 * 4 * rramtech^2;
+			xbar_area = xbarsize*xbarsize* 4 * rramtech*rramtech;
 		else{
 			techwl=calWL(tech);
 			xbar_area = xbarsize*xbarsize * (3 * techwl +1) * rramtech*rramtech;
@@ -33,7 +33,7 @@ void unit_area_c(int tech,int celltype,int xbarsize,int adposition,int adderposi
 	}
 	else{		// seperate
 		if (celltype == 0)
-			xbar_area = xbarsize^2 * 4 * rramtech^2;
+			xbar_area = xbarsize*xbarsize * 4 * rramtech*rramtech;
 		else{
 			techwl=calWL(tech);
 			xbar_area = xbarsize*xbarsize * (3 * techwl +1) * rramtech*rramtech;

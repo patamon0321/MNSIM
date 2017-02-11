@@ -12,16 +12,16 @@
 using namespace std;
 
 InputParameter *inputParameter;
-int count = 0;
+int count = 1;
 double minarea = 8e10;
 double minenergy = 8e10;
 double minpower = 8e10;
 double minlatency = 8e10;
 double minerr = 8e10;
 double area,area_flags,latency,latency_multi,power_multi,power_flags,area_multi,power,energy,application,action_type,target;
-double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][16];
+double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][18];
 int layer_computation_times[] = {49284,49284,12100,12100,2916,2916,2916,676,676,676,144,144,144,1,1,1};
-double mintarget[6]={0,minarea,minenergy,minlatency,minerr,minpower},AAAestrslt[1100][16];
+double mintarget[8]={0,minarea,minenergy,minlatency,minerr,minpower},AAAestrslt[1100][18];
 int mincount[6];
 double tech;
 int err_count;
@@ -60,7 +60,7 @@ int main()
 //                 for max_resis_range = [100e3,500e3,100e4]
 //                     resis_range(2) = max_resis_range
             for (double adderposition = max(0,inputParameter->minAdder);adderposition<=min(1,inputParameter->maxAdder);adderposition++)
-                //for tech = 45/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
+                for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
 //             tech = linetech;
                     for (double linetech = 90;linetech<=90;linetech++)//[18,22,28,36,45,65,90];
 //         for celltype = max(0,minCell):min(1,maxCell)
@@ -89,7 +89,7 @@ int main()
 											input_err[(int)netlevel] = accuracy;
 											
 											area = area_u * netrow * netcolumn + area_l + area_p ;//+ area_r + area_w;
-											area_flags = area_flags * netrow * netcolumn;
+											//area_flags = area_flags * netrow * netcolumn;
 											if (adderposition == 0){
 												energy = power_u * latency_u * netrow * netcolumn + power_l * latency_l + power_p * latency_p;// + power_r + power_w;
 												latency = latency_u + latency_l + latency_p;
@@ -101,7 +101,7 @@ int main()
 												lantency_multi = latency_u * netrow;
 											}
 											power_multi = power_u * netrow * netcolumn;
-											power_flags = power_flags * netrow * netcolumn;
+											//power_flags = power_flags * netrow * netcolumn;
 											area_multi = area_u * netrow * netcolumn;
 											power = power_u  * netrow * netcolumn + power_l  + power_p ;
 											energy = power * latency;
@@ -116,19 +116,19 @@ int main()
 									}
 						}
     int design_space = count/inputParameter->AppScale;    
-	for (int temp_count = 1;temp_count<design_space;temp_count++){
-		for(int netlevel_temp=1;netlevel_temp<inputParameter->AppScale;netlevel_temp++){
-			for(int i=0;i<16;i++)
+	for (int temp_count = 1;temp_count<=design_space;temp_count++){
+		for(int netlevel_temp=1;netlevel_temp<=inputParameter->AppScale;netlevel_temp++){
+			for(int i=1;i<=16;i++)
 				AAAestrslt[temp_count][i] = AAAestrslt[temp_count][i]+AAestrslt[((temp_count-1) * inputParameter->AppScale +netlevel_temp)][i];
 			AAAestrslt[temp_count][3] =AAAestrslt[temp_count][3] + AAestrslt[((temp_count-1) * inputParameter->AppScale +netlevel_temp)][3]*(layer_computation_times[netlevel_temp]-1);
 		}
                                         
 		//AAAestrslt(temp_count,3) =AAestrslt(((temp_count-1) * AppScale +1),3)*layer_computation_times(1);
-		AAAestrslt[temp_count][3] = AAAestrslt[temp_count][3]/inputParameter->AppScale;
-		AAAestrslt[temp_count][5] = AAAestrslt[temp_count][5]/inputParameter->AppScale;
+		AAAestrslt[temp_count][4] = AAAestrslt[temp_count][4]/inputParameter->AppScale;
 		AAAestrslt[temp_count][6] = AAAestrslt[temp_count][6]/inputParameter->AppScale;
-		for(int i=10;i<16;i++)
-			AAAestrslt[temp_count][9] = AAAestrslt[temp_count][9]/inputParameter->AppScale;
+		AAAestrslt[temp_count][7] = AAAestrslt[temp_count][7]/inputParameter->AppScale;
+		for(int i=10;i<=16;i++)
+			AAAestrslt[temp_count][i] = AAAestrslt[temp_count][i]/inputParameter->AppScale;
 
 		AAAestrslt[temp_count][4] = max1(((temp_count-1) * inputParameter->AppScale+1),((temp_count-1) * inputParameter->AppScale+inputParameter->AppScale),4);
 
@@ -140,12 +140,12 @@ int main()
                 mincount[target_tt] = temp_count;
 			}
 	}
-	double optresult[10][16];
+	double optresult[10][18];
 	if (count>2){
 		for(int i=2;i<=6;i++)
-			for(int j=1;j<16;j++)
-				optresult[i-2][j] = AAAestrslt[mincount[i]][j];
-		for(int i=0;i<5;i++)
+			for(int j=1;j<=16;j++)
+				optresult[i-1][j] = AAAestrslt[mincount[i]][j];
+		for(int i=1;i<=5;i++)
 			for(int j=1;j<=3;j++)
 				optresult[i][j] = optresult[i][j]*1e6;	
 	}

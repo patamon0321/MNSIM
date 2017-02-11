@@ -7,7 +7,7 @@
 
 void determin_sig(int xbarsize,int adderposition,int sig_bit,int cell_bit,int adposition);
 void determin_net(int xbarsize,int rowsize,int columnsize,int signalsize);
-int calWL(int tech);
+double calWL(int tech);
 double adsize(int tech,int sig_bit);
 double dasize(int tech,int sig_bit);
 double addersize(int tech,int sig_bit);

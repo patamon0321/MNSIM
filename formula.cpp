@@ -28,13 +28,13 @@ void determin_net(int xbarsize,int rowsize,int columnsize,int signalsize){
     bandwidth = signalsize * netrow;
 }
 
-int calWL(int tech){
+double calWL(int tech){
 	switch(tech){
 	case 130:
             return 6; break;
 	case 90:
             return 6; break;
-    otherwise:
+    default:
             return 6; break;
 	}
 }
@@ -57,21 +57,23 @@ double addersize(int tech,int sig_bit){
 	if (tech<0)
         return (abs(tech) * 1e-9)*(abs(tech) * 1e-9)*18*sig_bit*16;
     else
-        return 296e-6 * 1e-6 *(tech/65)*(tech/65);
+        return 296e-6 * 1e-6 *((double)tech/65)*((double)tech/65);
 }
 
 double pulsesize(int tech){
 	if(tech<0)
         return (tech * 1e-9)*(tech * 1e-9) * 18 * 20;
     else
-        return 182e-6 * 65e-6 * (tech/130)*(tech/130);
+        return 182e-6 * 65e-6 * ((double)tech/130)*((double)tech/130);
 }
 
 double bl_decoder_size(int tech,int celltype,int xbarsize){
-	double L; int m,p,k;
-	if (tech<0)
+	double L; 
+	int m,p,k;
+	if (tech<0){
 		if (celltype == 1)
 			return(tech *1e-9)*(tech *1e-9) * 18 *25 * xbarsize;
+	}
 	else{
 	//	    if celltype == 1
 			L = tech * 1e-9;
@@ -113,7 +115,7 @@ double bl_decoder_size(int tech,int celltype,int xbarsize){
 					k = 5;
 					p = 5;
 					break;
-				otherwise:
+				default:
 					;
 			}
 			return(1+1+2+2+2+1+1+1+8+8+2+1+60+30+10)*L*L*m+(1+2+4+8+16+32)*L*L*k+(2*k+k*k*k+1+2+4+8+16+32) *L*L*k+(1+2+4+8+16+32)*L*L*p + (2*p+p*p*p+1+2+4+8+16+32) *L*L*p;
@@ -187,7 +189,7 @@ double neuronsize(int tech,int sig_bit,int application){
         return (tech * 1e-9)*(tech * 1e-9)* 18  * 20;
     else
         if (application == 0)
-           return adsize(tech,sig_bit) + 15e-6 * 18e-6 * (tech/130)*(tech/130)+ dasize(tech,sig_bit);
+           return adsize(tech,sig_bit) + 15e-6 * 18e-6 * ((double)tech/130)*((double)tech/130)+ dasize(tech,sig_bit);
         else
            return (tech * 1e-9)*(tech * 1e-9) * 6 * 20+ dasize(tech,sig_bit);
 }
