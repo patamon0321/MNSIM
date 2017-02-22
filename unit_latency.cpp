@@ -1,6 +1,6 @@
 #include"global.h"
 #include"function.h"
-#include"formula.h"
+#include"module.h"
 double xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,latency_u;
 void unit_latency_c(int tech,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int action_type,int sig_bit,int read_seperate){
 	xbar_latency = cal_xbar_l(tech,celltype,xbarsize,action_type);

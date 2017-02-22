@@ -1,6 +1,6 @@
 #include<iostream>
-#ifndef FORMULA_H_
-#define FORMULA_H_
+#ifndef MODULE_H_
+#define MODULE_H_
 
 #define max(a,b) (((a)> (b))?(a):(b))
 #define min(a,b) (((a)< (b))?(a):(b))

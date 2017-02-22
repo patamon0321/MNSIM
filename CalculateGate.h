@@ -3,6 +3,7 @@
 
 #include "formula.h"
 #include <stdlib.h>
+#include "Technology.h"
 
 class CalGate {
 public:
@@ -15,7 +16,6 @@ public:
 	double Width;
 	double HeightTransistorRegion;
 	double Temperature;
-	Technology Tech;
 
 	/* Functions */
 	CalGate(int gatetype, int type_npmos, int numinput, double widthnmos, double widthpmos, double width, double heighttransistorregion, double temperature, Technology tech);

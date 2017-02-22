@@ -1,4 +1,4 @@
-#include"formula.h"
+#include"module.h"
 #include"global.h"
 #include<math.h>
 int control;

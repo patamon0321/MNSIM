@@ -5,7 +5,7 @@
 #include<time.h>
 #include<string>
 #include"InputParameter.h"
-#include"formula.h"
+#include"module.h"
 #include"global.h"
 #include"function.h"
 

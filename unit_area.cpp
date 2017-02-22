@@ -1,4 +1,4 @@
-#include"formula.h"
+#include"module.h"
 #include"global.h"
 #include"function.h"
 double xbar_area,techwl,ad_area,da_area,adder_area,pulse_area,decoder_area,read_area,write_area,Sub_area,area_u;

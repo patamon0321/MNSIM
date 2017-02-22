@@ -1,6 +1,6 @@
 #include"global.h"
 #include"function.h"
-#include"formula.h" 
+#include"module.h" 
 double xbar_power,adder_power,adder_act,adder_leak,ad_power,da_power,decoder_power,read_power,pulse_power,write_power,Sub_power,power_u;
 double area_l=0,power_l=0,latency_l=0;
 void unit_power_c(int tech,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int action_type,int sig_bit,int application,int resis_range,int netrow,double xbar_latency,double adda_latency,double adder_latency,double decoder_latency,double write_latency,double read_latency,double read_seperate){
