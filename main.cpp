@@ -119,11 +119,11 @@ int main()
 												cell_bit = bit_level;
 											determin_sig(xbarsize,adderposition,inputParameter->sig_bit,cell_bit,adposition);
 											determin_net(xbarsize,inputParameter->NetScale[2*(int)netlevel-1-1],inputParameter->NetScale[2*(int)netlevel-1],signalsize);
-											unit_area_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,inputParameter->sig_bit,application,inputParameter->rramtech,read_sep);
-											unit_latency_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,read_sep);
-											unit_power_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,application,inputParameter->maxRRang,netrow,xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,read_sep);
-											periphery_area(tech,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application);
-											periphery_latency_c( tech,netrow, adderposition,pulseposition,inputParameter->sig_bit,application);
+											unit_area_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,inputParameter->sig_bit,application,inputParameter->rramtech,read_sep);
+											unit_latency_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,read_sep);
+											unit_power_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,application,inputParameter->maxRRang,netrow,xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,read_sep);
+											periphery_area(*technology,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application);
+											periphery_latency_c( *technology,netrow, adderposition,pulseposition,inputParameter->sig_bit,application);
 										    periphery_power_c(tech,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application,adders_latency,neuron_latency,pulse_latency);
 											accuracy_c(xbarsize,linetech,inputParameter->sig_bit,cell_bit,inputParameter->maxRRang,input_err[(int)netlevel-1]);
 											input_err[(int)netlevel] = accuracy;

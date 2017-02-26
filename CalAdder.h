@@ -11,7 +11,7 @@ class Cal_Adder {
 		int Adder_InputNum;//bit of input
 		CalGate INV_1IN,NAND_2IN,NAND_3IN,NAND_4IN;
 		
-		Cal_Adder(int addinputnum,Technology tech);//tech 确定widthnoms，widthpmos
+		Cal_Adder(Technology tech,int addinputnum);//tech 确定widthnoms，widthpmos
 		virtual ~Cal_Adder(); 
 		double Adder_Area();
 		double Adder_Latency();

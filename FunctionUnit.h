@@ -2,6 +2,8 @@
 #define FUNCTIONUNIT_H_
 
 #include <iostream>
+#include"module.h"
+#include"global.h"
 
 using namespace std;
 

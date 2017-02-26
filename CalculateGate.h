@@ -3,6 +3,7 @@
 
 #include "formula.h"
 #include <stdlib.h>
+#include "Technology.h"
 
 class CalGate {
 public:
