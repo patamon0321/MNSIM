@@ -6,8 +6,10 @@
 #include<string>
 #include"InputParameter.h"
 #include"module.h"
+#include"formula.h"
 #include"global.h"
 #include"function.h"
+#include"Technology.h"
 
 using namespace std;
 
@@ -18,6 +20,7 @@ double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][19],AAAestrslt[110
 int mincount[7];
 double tech;
 int err_count;
+Technology *technology;
 
 int main()
 {
@@ -49,6 +52,37 @@ int main()
 		case 'L':
 				target = 3;break;
 	}
+
+	technology = new Technology();
+	technology->Initialize(inputParameter->TranTech, HP/*inputParameter->deviceRoadmap*/);
+
+	Technology techHigh;
+	double alpha = 0;
+	if (inputParameter->TranTech > 200){  //选择工艺 计算参数
+		// TO-DO: technology node > 200 nm
+	} else if (inputParameter->TranTech > 120) { // 120 nm < technology node <= 200 nm
+		techHigh.Initialize(200, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 120.0) / 60;
+	} else if (inputParameter->TranTech > 90) { // 90 nm < technology node <= 120 nm
+		techHigh.Initialize(120, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 90.0) / 30;
+	} else if (inputParameter->TranTech > 65) { // 65 nm < technology node <= 90 nm
+		techHigh.Initialize(90, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 65.0) / 25;
+	} else if (inputParameter->TranTech > 45) { // 45 nm < technology node <= 65 nm
+		techHigh.Initialize(65, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 45.0) / 20;
+	} else if (inputParameter->TranTech >= 32) { // 32 nm < technology node <= 45 nm
+		techHigh.Initialize(45, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 32.0) / 13;
+	} else if (inputParameter->TranTech >= 22) { // 22 nm < technology node <= 32 nm
+		techHigh.Initialize(32, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 22.0) / 10;
+	} else {
+		//TO-DO: technology node < 22 nm
+	}
+
+	technology->InterpolateWith(techHigh, alpha);  //
 
 	//  load tech
 	int tech = inputParameter->TranTech;

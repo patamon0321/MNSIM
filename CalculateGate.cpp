@@ -1,5 +1,4 @@
 #include "CalculateGate.h"
-#include "formula.h"
 
 CalGate::CalGate(int gatetype, int type_npmos, int numinput, double widthnmos, double widthpmos, double width, double heighttransistorregion, double temperature, Technology tech) {
 	GateType = gatetype;
@@ -41,7 +40,7 @@ double CalGate::Power_Leakage(){
 
 double CalGate::Power_Dynamic(){
 	double c, cin, cout;
-	CalculateGateCapdouble CalculateGateCap(double width, Technology tech)(GateType, NumInput, WidthNMOS, WidthPMOS, HeightTransistorRegion, Tech, &cin, &cout);
+	CalculateGateCapacitance(GateType, NumInput, WidthNMOS, WidthPMOS, HeightTransistorRegion, Tech, &cin, &cout);
 	c = cout;	/* we don't consider cin of the device at the first stage */
 	return c * Tech.vdd * Tech.vdd;
 }

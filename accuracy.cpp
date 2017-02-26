@@ -1,6 +1,6 @@
 #include"global.h"
 #include"function.h"
-#include"module.h"
+#include"formula.h"
 #include<math.h>
 double accuracy, d1;
 void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_range,double input_err){
