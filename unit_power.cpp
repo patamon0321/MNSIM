@@ -5,11 +5,11 @@ double xbar_power,adder_power,adder_act,adder_leak,ad_power,da_power,decoder_pow
 double area_l=0,power_l=0,latency_l=0;
 void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int action_type,int sig_bit,int application,int resis_range,int netrow,double xbar_latency,double adda_latency,double adder_latency,double decoder_latency,double write_latency,double read_latency,double read_seperate){
  
-	
+	Cal_Adder Cal_Adder_temp(technology,sig_bit);
 	if (read_seperate == 0){
 		xbar_power = cal_xbar_p(tech,celltype,xbarsize,resis_range,action_type);
 		if (action_type == 2){
-			cal_adder_p(technology,sig_bit);
+			///cal_adder_p(technology,sig_bit);
 	//         adder_avg_p = (adder_act * (netrow-1) + adder_leak * ((netrow-1)*netrow+netrow))/(netrow^2);
 			adder_power = adderposition * adder_act * xbarsize;
 		}
@@ -36,9 +36,9 @@ void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition
 	else{
 		xbar_power = cal_xbar_p(tech,celltype,xbarsize,resis_range,action_type)/xbarsize;
 		if (action_type == 2){
-			cal_adder_p(technology,sig_bit);
+			///cal_adder_p(technology,sig_bit);
 	//         adder_avg_p = (adder_act * (netrow-1) + adder_leak * ((netrow-1)*netrow+netrow))/(netrow^2);
-			adder_power = adderposition * adder_act * xbarsize;
+			adder_power = adderposition * Cal_Adder_temp.Adder_Power_Dynamic() * xbarsize;
 		}
 		else 
 			adder_power = 0;

@@ -101,7 +101,7 @@ int main()
 //                 for max_resis_range = [100e3,500e3,100e4]
 //                     resis_range(2) = max_resis_range
             for (double adderposition = max(0,inputParameter->minAdder);adderposition<=min(1,inputParameter->maxAdder);adderposition++)
-                for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
+                //for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
 //             tech = linetech;
                     for (double linetech = 90;linetech<=90;linetech++)//[18,22,28,36,45,65,90];
 //         for celltype = max(0,minCell):min(1,maxCell)
@@ -124,7 +124,7 @@ int main()
 											unit_power_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,application,inputParameter->maxRRang,netrow,xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,read_sep);
 											periphery_area(*technology,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application);
 											periphery_latency_c( *technology,netrow, adderposition,pulseposition,inputParameter->sig_bit,application);
-										    periphery_power_c(tech,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application,adders_latency,neuron_latency,pulse_latency);
+										    periphery_power_c(*technology,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application,adders_latency,neuron_latency,pulse_latency);
 											accuracy_c(xbarsize,linetech,inputParameter->sig_bit,cell_bit,inputParameter->maxRRang,input_err[(int)netlevel-1]);
 											input_err[(int)netlevel] = accuracy;
 											

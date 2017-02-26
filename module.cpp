@@ -139,9 +139,9 @@ double cal_ad_l(int tech,int sig_bit){
 double cal_da_l(int tech,int sig_bit){
 	return 1/(960e6);
 }
-double cal_adder_l(int tech,int sig_bit){
+/*double cal_adder_l(int tech,int sig_bit){
 	return 1e-9;
-}
+}*/
 double cal_decoder_l(int tech,int xbarsize,int celltype,int action_type){
 	return 1e-8;
 }
@@ -155,11 +155,10 @@ double cal_xbar_p(int tech,int celltype,int xbarsize,double resis_range,int acti
     if (action_type == 2)
         return cell_r_p * xbarsize*xbarsize;
 }
-void cal_adder_p(Technology technology,int sig_bit){
-	Cal_Adder  Cal_Adder_temp(technology,sig_bit);
-	adder_power = Cal_Adder_temp.Adder_Power_Dynamic();
-    adder_leak = Cal_Adder_temp.Adder_Power_Leakage();
-}
+/*void cal_adder_p(int tech,int sig_bit){
+	adder_power = 0.1e-3;
+    adder_leak = 0;
+}*/
 double cal_ad_p(int tech,int sig_bit){
 	return 0.26e-3;
 }
@@ -208,14 +207,17 @@ double cal_neuron_l(int tech,int sig_bit,int application){
     else
         return 6e-8+ cal_da_l(tech,sig_bit);
 }
-void periphery_power_c(int tech,int xbarsize,int netrow,int netcolumn, int adderposition,int pulseposition,int sig_bit,int application,double adders_latency,double neuron_latency,double pulse_latency){
+void periphery_power_c(Technology tech,int xbarsize,int netrow,int netcolumn, int adderposition,int pulseposition,int sig_bit,int application,double adders_latency,double neuron_latency,double pulse_latency){
+	
+	Cal_Adder Cal_Adder_temp(tech,sig_bit);
 	if (adderposition == 0){ // 在外边统一加
-        adder_act=0.1e-3;adder_leak= 0;
+        adder_act=Cal_Adder_temp.Adder_Power_Dynamic();
+		adder_leak= Cal_Adder_temp.Adder_Power_Leakage();
         adders_power = (adder_act * (netrow-1) * netcolumn) ;//*adders_latency ;//+adder_leak* (netrow-1) * netcolumn*(neuron_latency+pulse_latency))/(adders_latency + neuron_latency + pulse_latency) ;
 	}
 	else
         adders_power = 0;
-    neuron_power = cal_neuron_p(tech,sig_bit,application) * xbarsize * netcolumn;
+    neuron_power = cal_neuron_p(tech.featureSizeInNano ,sig_bit,application) * xbarsize * netcolumn;
 //     neuron_power = neuron_power * neuron_latency/(adders_latency + neuron_latency + pulse_latency);
     pulse_power = (1-pulseposition) * 11.6e-3;// *pulse_latency/(adders_latency + neuron_latency + pulse_latency);
     power_p = adders_power + neuron_power + pulse_power;

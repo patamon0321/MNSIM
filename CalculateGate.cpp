@@ -35,7 +35,7 @@ double CalGate::Latency(){
 }
 
 double CalGate::Power_Leakage(){
-	return Tech.vdd * CalculateGateLeakage(GateType, NumInput, WidthNMOS, WidthPMOS, HeightTransistorRegion, Tech);
+	return Tech.vdd * CalculateGateLeakage(GateType, NumInput, WidthNMOS, WidthPMOS, Temperature, Tech);
 }
 
 double CalGate::Power_Dynamic(){
