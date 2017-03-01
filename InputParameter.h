@@ -44,6 +44,7 @@ public:
 	int TranTech;
 	string WriteMth;
 	string cfgtxt[20];
+
 };
 
 #endif
