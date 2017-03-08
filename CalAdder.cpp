@@ -1,6 +1,6 @@
 #include "CalAdder.h"
 
-Cal_Adder::Cal_Adder(Technology tech,int addinputnum):INV_1IN(INV,NMOS,1,3*45,3*45,3*45,45,40+273.15,tech),NAND_2IN(NAND,NMOS,2,3*45,3*45,3*45,45,40+273,tech),NAND_3IN(NAND,NMOS,3,3*45,3*45,3*45,45,40+273.15,tech),NAND_4IN(NAND,NMOS,4,3*45,3*45,3*45,45,40+273.15,tech){
+Cal_Adder::Cal_Adder(Technology tech,int addinputnum):INV_1IN(INV,NMOS,1,3*tech.featureSize,3*tech.featureSize,3*tech.featureSize,tech.featureSize*50,40+273.15,tech),NAND_2IN(NAND,NMOS,2,3*tech.featureSize,3*tech.featureSize,3*tech.featureSize,tech.featureSize*50,40+273,tech),NAND_3IN(NAND,NMOS,3,3*tech.featureSize,3*tech.featureSize,3*tech.featureSize,tech.featureSize*50,40+273.15,tech),NAND_4IN(NAND,NMOS,4,3*tech.featureSize,3*tech.featureSize,3*tech.featureSize,tech.featureSize*50,40+273.15,tech){
 	Adder_InputNum = addinputnum;
 }
 

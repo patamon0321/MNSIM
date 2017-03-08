@@ -1,6 +1,6 @@
 #include"global.h"
 #include"function.h"
-#include"module.h"
+#include"formula.h"
 #include<math.h>
 double accuracy, d1;
 void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_range,double input_err){
@@ -34,13 +34,13 @@ void accuracy_c(int xbarsize,int linetech,int sig_bit,int cell_bit,int resis_ran
     accuracy = (1+y0)*(1+input_err)-1;
     //a = 0:2^sig_bit-1;
     //d1 = sum(floor(a*accuracy+0.5))/2^sig_bit/(2^sig_bit-1);  另一种精确度
-	double sum=0;
-	for(double i=0;i<=sig_bit*sig_bit-1;i++){
-		sum=sum+floor(i*accuracy+0.5);
-	}
 	double temp1=1;
 	for(int i=0;i<sig_bit;i++)
 		temp1=temp1*2;
+	double sum=0;
+	for(double i=0;i<=temp1-1;i++){
+		sum=sum+floor(i*accuracy+0.5);
+	}
 	d1=sum/(temp1)/(temp1-1);
     
 //     c(1)+c(2)./(c(3)+xbarsize) + c(4)*xbarsize^2 .*r_line;

@@ -6,8 +6,10 @@
 #include<string>
 #include"InputParameter.h"
 #include"module.h"
+#include"formula.h"
 #include"global.h"
 #include"function.h"
+#include"Technology.h"
 
 using namespace std;
 
@@ -18,6 +20,7 @@ double pulseposition,cell_bit,lantency_multi,AAestrslt[17000][19],AAAestrslt[110
 int mincount[7];
 double tech;
 int err_count;
+Technology *technology;
 
 int main()
 {
@@ -50,6 +53,37 @@ int main()
 				target = 3;break;
 	}
 
+	technology = new Technology();
+	technology->Initialize(inputParameter->TranTech, HP/*inputParameter->deviceRoadmap*/);
+
+	Technology techHigh;
+	double alpha = 0;
+	if (inputParameter->TranTech > 200){  //选择工艺 计算参数
+		// TO-DO: technology node > 200 nm
+	} else if (inputParameter->TranTech > 120) { // 120 nm < technology node <= 200 nm
+		techHigh.Initialize(200, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 120.0) / 60;
+	} else if (inputParameter->TranTech > 90) { // 90 nm < technology node <= 120 nm
+		techHigh.Initialize(120, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 90.0) / 30;
+	} else if (inputParameter->TranTech > 65) { // 65 nm < technology node <= 90 nm
+		techHigh.Initialize(90, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 65.0) / 25;
+	} else if (inputParameter->TranTech > 45) { // 45 nm < technology node <= 65 nm
+		techHigh.Initialize(65, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 45.0) / 20;
+	} else if (inputParameter->TranTech >= 32) { // 32 nm < technology node <= 45 nm
+		techHigh.Initialize(45, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 32.0) / 13;
+	} else if (inputParameter->TranTech >= 22) { // 22 nm < technology node <= 32 nm
+		techHigh.Initialize(32, HP/*inputParameter->deviceRoadmap*/);
+		alpha = (inputParameter->TranTech - 22.0) / 10;
+	} else {
+		//TO-DO: technology node < 22 nm
+	}
+
+	technology->InterpolateWith(techHigh, alpha);  //
+
 	//  load tech
 	int tech = inputParameter->TranTech;
     double minarea = 8e10;
@@ -67,7 +101,7 @@ int main()
 //                 for max_resis_range = [100e3,500e3,100e4]
 //                     resis_range(2) = max_resis_range
             for (double adderposition = max(0,inputParameter->minAdder);adderposition<=min(1,inputParameter->maxAdder);adderposition++)
-                for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
+                //for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
 //             tech = linetech;
                     for (double linetech = 90;linetech<=90;linetech++)//[18,22,28,36,45,65,90];
 //         for celltype = max(0,minCell):min(1,maxCell)
@@ -85,12 +119,12 @@ int main()
 												cell_bit = bit_level;
 											determin_sig(xbarsize,adderposition,inputParameter->sig_bit,cell_bit,adposition);
 											determin_net(xbarsize,inputParameter->NetScale[2*(int)netlevel-1-1],inputParameter->NetScale[2*(int)netlevel-1],signalsize);
-											unit_area_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,inputParameter->sig_bit,application,inputParameter->rramtech,read_sep);
-											unit_latency_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,read_sep);
-											unit_power_c(tech,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,application,inputParameter->maxRRang,netrow,xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,read_sep);
-											periphery_area(tech,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application);
-											periphery_latency_c( tech,netrow, adderposition,pulseposition,inputParameter->sig_bit,application);
-										    periphery_power_c(tech,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application,adders_latency,neuron_latency,pulse_latency);
+											unit_area_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,inputParameter->sig_bit,application,inputParameter->rramtech,read_sep);
+											unit_latency_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,read_sep);
+											unit_power_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,action_type,inputParameter->sig_bit,application,inputParameter->maxRRang,netrow,xbar_latency,adda_latency,adder_latency,decoder_latency,write_latency,read_latency,read_sep);
+											periphery_area(*technology,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application);
+											periphery_latency_c( *technology,netrow, adderposition,pulseposition,inputParameter->sig_bit,application);
+										    periphery_power_c(*technology,xbarsize, netrow, netcolumn, adderposition,pulseposition,inputParameter->sig_bit,application,adders_latency,neuron_latency,pulse_latency);
 											accuracy_c(xbarsize,linetech,inputParameter->sig_bit,cell_bit,inputParameter->maxRRang,input_err[(int)netlevel-1]);
 											input_err[(int)netlevel] = accuracy;
 											
@@ -111,7 +145,7 @@ int main()
 											area_multi = area_u * netrow * netcolumn;
 											power = power_u  * netrow * netcolumn + power_l  + power_p ;
 											energy = power * latency;
-											//将结果存储到AAestrslt,与matlab版相比，缺少了matlab版本的第7个元素d1
+											
 											equal(netlevel,area,energy,latency,power,accuracy,area_multi,power_multi,latency_multi,read_sep,adposition,bit_level,adderposition,pulseposition,linetech,celltype,xbarsize);
 
 											if (accuracy < minerr){
