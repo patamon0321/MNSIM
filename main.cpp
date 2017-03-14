@@ -145,7 +145,7 @@ int main()
 											area_multi = area_u * netrow * netcolumn;
 											power = power_u  * netrow * netcolumn + power_l  + power_p ;
 											energy = power * latency;
-											//将结果存储到AAestrslt,与matlab版相比，缺少了matlab版本的第7个元素d1
+											
 											equal(netlevel,area,energy,latency,power,accuracy,area_multi,power_multi,latency_multi,read_sep,adposition,bit_level,adderposition,pulseposition,linetech,celltype,xbarsize);
 
 											if (accuracy < minerr){
