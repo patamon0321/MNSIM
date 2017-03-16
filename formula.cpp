@@ -34,7 +34,6 @@
 *                     Website: http://www.cse.psu.edu/~xydong/ )
 *******************************************************************************/
 
-
 #include "formula.h"
 #include "constant.h"
 #include <stdlib.h>

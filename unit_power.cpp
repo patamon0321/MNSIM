@@ -6,6 +6,7 @@ double area_l=0,power_l=0,latency_l=0;
 void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int action_type,int sig_bit,int application,int resis_range,int netrow,double xbar_latency,double adda_latency,double adder_latency,double decoder_latency,double write_latency,double read_latency,double read_seperate){
  
 	Cal_Adder Cal_Adder_temp(technology,sig_bit);
+	Cal_Decoder Cal_Adder_Decoder(technology,celltype,xbarsize);
 	if (read_seperate == 0){
 		xbar_power = cal_xbar_p(tech,celltype,xbarsize,resis_range,action_type);
 		if (action_type == 2){
@@ -17,7 +18,8 @@ void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition
 			adder_power = 0;
 		ad_power = adposition * (cal_ad_p(tech,sig_bit)) * xbarsize;
 		da_power = adposition *cal_da_p(tech,sig_bit)* xbarsize;
-		decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
+		//decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
+		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic();
 		read_power = 4.528e-3/50 * xbarsize;
 		pulse_power = pulseposition * 11.6e-3;
 		write_power = pulse_power + 0;
@@ -44,7 +46,8 @@ void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition
 			adder_power = 0;
 		ad_power = adposition * (cal_ad_p(tech,sig_bit));   
 		da_power = adposition *cal_da_p(tech,sig_bit)* xbarsize;
-		decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
+		//decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
+		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic();
 		read_power = 4.528e-3/50 * read_seperate;
 		pulse_power = pulseposition * 11.6e-3;
 		write_power = pulse_power + 0;
