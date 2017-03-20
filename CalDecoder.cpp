@@ -22,7 +22,7 @@ double Cal_Decoder::Decoder_Area(int temp){
 		for(int i=0;i<temp1;i++)
 			num_temp1=num_temp1*2;
 		for(int i=0;i<temp2;i++)
-			num_temp2=num_temp1*2;
+			num_temp2=num_temp2*2;
 		return Decoder_Area(temp1)+Decoder_Area(temp2)+2*(num_temp1+num_temp2)*3*INV_1IN.Area()+num_out*NAND_2IN.Area();
 	}
 }
@@ -54,7 +54,7 @@ double Cal_Decoder::Decoder_Power_Dynamic(int temp){
 		for(int i=0;i<temp1;i++)
 			num_temp1=num_temp1*2;
 		for(int i=0;i<temp2;i++)
-			num_temp2=num_temp1*2;
+			num_temp2=num_temp2*2;
 		return Decoder_Power_Dynamic(temp1)+Decoder_Power_Dynamic(temp2)+2*(num_temp1+num_temp2)*3*INV_1IN.Power_Dynamic()+num_out*NAND_2IN.Power_Dynamic();
 	}
 };
