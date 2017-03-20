@@ -20,7 +20,7 @@ void unit_area_c(Technology technology,int celltype,int xbarsize,int adposition,
 			//decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
 		//else
 			//decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
-		decoder_area =  Cal_Adder_Decoder.Decoder_Area();
+		decoder_area =  Cal_Adder_Decoder.Decoder_Area(Cal_Adder_Decoder.num_in);
 		read_area = readsize(technology.featureSizeInNano) * xbarsize;
 		write_area = writesize(technology.featureSizeInNano,celltype);
 		if (application ==0){
@@ -49,7 +49,7 @@ void unit_area_c(Technology technology,int celltype,int xbarsize,int adposition,
 		//	decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
 		//else
 		//	decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
-		decoder_area =  Cal_Adder_Decoder.Decoder_Area();
+		decoder_area =  Cal_Adder_Decoder.Decoder_Area(Cal_Adder_Decoder.num_in);
 		read_area = readsize(technology.featureSizeInNano) *read_seperate;
 		write_area = writesize(technology.featureSizeInNano,celltype);
     

@@ -13,7 +13,7 @@ void unit_latency_c(Technology technology,int celltype,int xbarsize,int adpositi
     else
         adder_latency = 0;
     //decoder_latency = cal_decoder_l(technology.featureSizeInNano,xbarsize,celltype,action_type);
-	decoder_latency = Cal_Adder_Decoder.Decoder_Latency();
+	decoder_latency = Cal_Adder_Decoder.Decoder_Latency(Cal_Adder_Decoder.num_in);
     if (action_type == 0)
         write_latency = pulseposition * 1.6e-9;
     else

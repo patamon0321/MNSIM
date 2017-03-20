@@ -19,7 +19,7 @@ void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition
 		ad_power = adposition * (cal_ad_p(tech,sig_bit)) * xbarsize;
 		da_power = adposition *cal_da_p(tech,sig_bit)* xbarsize;
 		//decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
-		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic();
+		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic(Cal_Adder_Decoder.num_in);
 		read_power = 4.528e-3/50 * xbarsize;
 		pulse_power = pulseposition * 11.6e-3;
 		write_power = pulse_power + 0;
@@ -47,7 +47,7 @@ void unit_power_c(Technology technology,int celltype,int xbarsize,int adposition
 		ad_power = adposition * (cal_ad_p(tech,sig_bit));   
 		da_power = adposition *cal_da_p(tech,sig_bit)* xbarsize;
 		//decoder_power = cal_decoder_p(tech,celltype,xbarsize,action_type);
-		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic();
+		decoder_power = Cal_Adder_Decoder.Decoder_Power_Dynamic(Cal_Adder_Decoder.num_in);
 		read_power = 4.528e-3/50 * read_seperate;
 		pulse_power = pulseposition * 11.6e-3;
 		write_power = pulse_power + 0;
