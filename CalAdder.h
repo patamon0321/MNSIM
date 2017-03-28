@@ -1,5 +1,5 @@
-#ifndef CAL_ADDER_H_
-#define CAL_ADDER_H_
+#ifndef CALADDER_H_
+#define CALADDER_H_
 
 #include "CalculateGate.h"
 #include "technology.h"
