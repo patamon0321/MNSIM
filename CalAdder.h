@@ -2,7 +2,7 @@
 #define CALADDER_H_
 
 #include "CalculateGate.h"
-#include "technology.h"
+#include "Technology.h"
 #include <stdlib.h>
 #include "constant.h"
 

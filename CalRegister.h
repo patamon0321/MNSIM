@@ -1,11 +1,13 @@
+//k-bit¼Ä´æÆ÷
 #include <stdlib.h>
 
 #ifndef CALREGISTER_H_
 #define CALREGISTER_H_
 
 #include "CalculateGate.h"
-#include "technology.h"
+#include "Technology.h"
 #include "constant.h"
+
 
 class Cal_Register {
 public:

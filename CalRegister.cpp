@@ -13,3 +13,7 @@ double Cal_Register::Register_Area(){
 double Cal_Register::Register_Power_Dynamic(){
 	return Inputnum*(5*NOR_2IN.Power_Dynamic()+NOR_3IN.Power_Dynamic());
 }
+
+double Cal_Register::Register_Latency(){
+	return (2+2)*NOR_2IN.Latency()+NOR_3IN.Latency();
+}
