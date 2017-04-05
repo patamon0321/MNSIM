@@ -195,6 +195,9 @@ int main()
 		for(int i=1;i<=5;i++)
 			for(int j=1;j<=3;j++)
 				optresult[i][j] = optresult[i][j]*1e6;	
+		//单位nm
+		//optresult[1,2,...]中数据分别是area,energy,latency,power,accuracy,area_multi,power_multi,latency_multi,read_sep,adposition,bit_level,adderposition,pulseposition,linetech,celltype,xbarsize
+
 	}
 
 

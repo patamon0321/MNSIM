@@ -61,7 +61,7 @@ double pulsesize(int tech){
         return 182e-6 * 65e-6 * ((double)tech/130)*((double)tech/130);
 }
 
-double bl_decoder_size(int tech,int celltype,int xbarsize){
+/*double bl_decoder_size(int tech,int celltype,int xbarsize){
 	double L; 
 	int m,p,k;
 	if (tech<0){
@@ -120,7 +120,7 @@ double sl_decoder_size(int tech,int celltype,int xbarsize){
 }
 double wl_decoder_size(int tech,int celltype,int xbarsize){
 	return bl_decoder_size(tech,celltype,xbarsize);
-}
+}*/
 double readsize(int tech){
 	if(tech<0)
         return (tech * 1e-9)*(tech * 1e-9) * 18  * 20;
@@ -142,9 +142,9 @@ double cal_da_l(int tech,int sig_bit){
 /*double cal_adder_l(int tech,int sig_bit){
 	return 1e-9;
 }*/
-double cal_decoder_l(int tech,int xbarsize,int celltype,int action_type){
+/*double cal_decoder_l(int tech,int xbarsize,int celltype,int action_type){
 	return 1e-8;
-}
+}*/
 double cal_read_l(int tech,int xbarsize,int action_type){
 	return 168.96e-9;
 }
@@ -165,9 +165,9 @@ double cal_ad_p(int tech,int sig_bit){
 double cal_da_p(int tech,int sig_bit){
 	return 55e-6;
 }
-double cal_decoder_p(int tech,int celltype,int xbarsize,int action_type){
+/*double cal_decoder_p(int tech,int celltype,int xbarsize,int action_type){
 	return 0;
-}
+}*/
 void periphery_area(Technology technology,int xbarsize,int netrow,int netcolumn,int adderposition,int pulseposition,int sig_bit,int application){
 	
 	Cal_Adder  Cal_Adder_temp(technology,sig_bit);

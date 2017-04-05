@@ -4,6 +4,7 @@ double xbar_area,techwl,ad_area,da_area,adder_area,pulse_area,decoder_area,read_
 void unit_area_c(Technology technology,int celltype,int xbarsize,int adposition,int adderposition,int pulseposition,int sig_bit,int application,double rramtech,int read_seperate){
 	
 	Cal_Adder Cal_Adder_temp(technology,sig_bit);
+	Cal_Decoder Cal_Adder_Decoder(technology,celltype,xbarsize);
 	if (read_seperate == 0){
 		if (celltype == 0)
 			xbar_area = xbarsize*xbarsize* 4 * rramtech*rramtech;
@@ -15,10 +16,11 @@ void unit_area_c(Technology technology,int celltype,int xbarsize,int adposition,
 		da_area = adposition * (dasize(technology.featureSizeInNano,sig_bit)) * xbarsize;
 		adder_area = adderposition * Cal_Adder_temp.Adder_Area() * xbarsize;
 		pulse_area = pulseposition * pulsesize(technology.featureSizeInNano);
-		if (celltype == 0)
-			decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
-		else
-			decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		//if (celltype == 0)
+			//decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		//else
+			//decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		decoder_area =  Cal_Adder_Decoder.Decoder_Area(Cal_Adder_Decoder.num_in);
 		read_area = readsize(technology.featureSizeInNano) * xbarsize;
 		write_area = writesize(technology.featureSizeInNano,celltype);
 		if (application ==0){
@@ -43,10 +45,11 @@ void unit_area_c(Technology technology,int celltype,int xbarsize,int adposition,
 		da_area = adposition * (dasize(technology.featureSizeInNano,sig_bit)) * xbarsize;
 		adder_area = adderposition *  Cal_Adder_temp.Adder_Area() *read_seperate;
 		pulse_area = pulseposition * pulsesize(technology.featureSizeInNano);
-		if (celltype == 0)
-			decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
-		else
-			decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		//if (celltype == 0)
+		//	decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		//else
+		//	decoder_area = bl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + sl_decoder_size(technology.featureSizeInNano,celltype,xbarsize) + wl_decoder_size(technology.featureSizeInNano,celltype,xbarsize);
+		decoder_area =  Cal_Adder_Decoder.Decoder_Area(Cal_Adder_Decoder.num_in);
 		read_area = readsize(technology.featureSizeInNano) *read_seperate;
 		write_area = writesize(technology.featureSizeInNano,celltype);
     
