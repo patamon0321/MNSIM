@@ -30,9 +30,6 @@ int main()
 
 	//read configs  &  init configs
 	inputParameter->ReadInputParameterFromFile();
-
-	cell_bit=inputParameter->cell_bit;
-
 	if (inputParameter->Application[0] == 'a' ||inputParameter->Application[0] == 'A')
         application = 0;
     else
@@ -87,7 +84,6 @@ int main()
 
 	technology->InterpolateWith(techHigh, alpha);  //
 
-	
 	//  load tech
 	int tech = inputParameter->TranTech;
     double minarea = 8e10;
@@ -98,7 +94,7 @@ int main()
 	double mintarget[8]={0,0,minarea,minenergy,minlatency,minerr,minpower};
 	double input_err[200]={0};
 
-    for (double adposition=max(0,inputParameter->minAdPos);adposition<=min(1,inputParameter->maxAdPos);adposition++)//改成用户配置
+    for (double adposition=max(0,inputParameter->minAdPos);adposition<=min(1,inputParameter->maxAdPos);adposition++)
         for (double bit_level = max(0,inputParameter->minBtLv);(bit_level<=min(16,inputParameter->maxBtLv));bit_level++)
 //             for min_resis_range = 500:500:1e3
 //                 resis_range(1) =  min_resis_range
@@ -107,20 +103,20 @@ int main()
             for (double adderposition = max(0,inputParameter->minAdder);adderposition<=min(1,inputParameter->maxAdder);adderposition++)
                 //for (tech = 45;tech<=45;tech++)/*[18,22,28,36,45,65,90,130];max(22,minLine):min(22,maxLine)*/
 //             tech = linetech;
-                    for (double linetech = 65;linetech<=65;linetech++)//[18,22,28,36,45,65,90];
+                    for (double linetech = 90;linetech<=90;linetech++)//[18,22,28,36,45,65,90];
 //         for celltype = max(0,minCell):min(1,maxCell)
-                        for (double celltype = 1;celltype<=1;celltype++){//celltype==0,1T1R;celltype==1,0T1R
+                        for (double celltype = 1;celltype<=1;celltype++){
 //             for pulseposition = 0:1
                             pulseposition = 0;
                 
-                            for (double xbarsize = 256;xbarsize<=256;xbarsize+=128)//[4,8,16,32,64,128,256]%,512,1024]
-                                for (double read_sep = 0;read_sep<=0;read_sep++)//xbarsize/128 : xbarsize/128 : xbarsize%8:8:xbarsize
+                            for (double xbarsize = 128;xbarsize<=1024;xbarsize+=128)//[4,8,16,32,64,128,256]%,512,1024]
+                                for (double read_sep = 1;read_sep<=128;read_sep++)//xbarsize/128 : xbarsize/128 : xbarsize%8:8:xbarsize
                                     if (xbarsize<inputParameter->minXbarSize || xbarsize > inputParameter->maxXbarSize)
                                         cout<<"error:xbarsize over the limit"<<endl;
                                     else
 										for (double netlevel = 1;netlevel<=inputParameter->AppScale;netlevel++){ //-1
-											//if (bit_level != 0)
-											//	cell_bit = bit_level;
+											if (bit_level != 0)
+												cell_bit = bit_level;
 											determin_sig(xbarsize,adderposition,inputParameter->sig_bit,cell_bit,adposition);
 											determin_net(xbarsize,inputParameter->NetScale[2*(int)netlevel-1-1],inputParameter->NetScale[2*(int)netlevel-1],signalsize);
 											unit_area_c(*technology,celltype,xbarsize,adposition,adderposition,pulseposition,inputParameter->sig_bit,application,inputParameter->rramtech,read_sep);
@@ -163,7 +159,7 @@ int main()
 
 	int layer_computation_times[] = {49284,49284,12100,12100,2916,2916,2916,676,676,676,144,144,144,1,1,1};
 
-    double design_space = count/inputParameter->AppScale;
+    double design_space = count/inputParameter->AppScale;    
 
 	for (int temp_count = 1;temp_count<=design_space;temp_count++){
 		for(int netlevel_temp=1;netlevel_temp<=inputParameter->AppScale;netlevel_temp++){
@@ -189,8 +185,7 @@ int main()
                 mincount[target_tt] = temp_count;
 			}
 	}
-	//netlevel;
-	//AAAresult的结果（数组中0无意义，从1开始）：area;energy;latency;power;accuracy;d1;area_multi;power_multi;latency_multi;read_sep;adposition;bit_level;adderposition;pulseposition;linetech;celltype;xbarsize;
+
 
 	double optresult[10][18];
 	if (count>2){

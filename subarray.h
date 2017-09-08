@@ -5,18 +5,22 @@
 #include "CalculateGate.h"
 #include "Technology.h"
 #include "constant.h"
+#include "formula.h"
+#include <math.h>
 
 class Cal_Subarray{
 	public:
-		double width,height;
+		//double width,height;
 		Technology Tech;
 		double celltype;
 		double xbarsize;
-		Cal_Subarray(Technology tech,double width_temp, double height_temp,double celltype_temp,double xbar_temp);
+		double readLatency;
+		double writelatency;
+		Cal_Subarray(Technology tech,/*double width_temp, double height_temp,*/double celltype_temp,double xbar_temp);
 		virtual ~Cal_Subarray(); 
 		double Subarray_Area();
-		double Subarray_Latency(double _rampInput);
-		double Subarray_Power_Dynamic();
+		void Subarray_Latency(double _rampInput);
+		double Subarray_Power();
 };
 
 #endif

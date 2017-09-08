@@ -7,11 +7,11 @@ InputParameter::InputParameter() {
 	// TODO Auto-generated constructor stub
 	AppScale = 0;
 	rs = 3000;   
-	cell_bit = 4;
-	sig_bit = 6;
-	rramtech = 65e-9;
-	minXbarSize = 256;
-	maxXbarSize = 256;
+	cell_bit = 8;
+	sig_bit = 8;
+	rramtech = 32e-9;
+	minXbarSize = 4;
+	maxXbarSize = 128;
 	minCell = 1;
 	maxCell = 1;
 	minAdPos = 1;

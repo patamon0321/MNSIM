@@ -8,9 +8,9 @@ Target_Outputs Area
 
 Application ANN
 
-Application_Scale 1
+Application_Scale 16
 
-Network_Scale 256 256
+Network_Scale 9 64 576 64 576 128 1152 128 1152 256 2304 256 2304 256 2304 512 4608 512 4608 512 4608 512 4608 512 4608 512 25088 4096 4096 4096 4096 1000
 
 Weight_Polarity 2
 
@@ -20,16 +20,16 @@ Cell_Type 1T1R
 
 RRAM_Model ideal
 
-RRAM_Bit_Levels 4
+RRAM_Bit_Levels 8
 
-Transistor_Tech(nm) 65
+Transistor_Tech(nm) 130
 
-Min_Crossbar_Size 256
+Min_Crossbar_Size 4
 
-Max_Crossbar_Size 256
+Max_Crossbar_Size 1024
 
 Write_Method ideal
 
-Line_Tech 65
+Line_Tech 22
 
 Action_Type Calculation
