@@ -1,0 +1,16 @@
+area:135.336829
+energy:835259.908031
+latency:43.418526
+power:36.865430
+accuracy:0.677681
+area_multi:0.338847
+power_multi:0.000031
+latency_multi:32.244630
+read_sep:0.000043
+adposition:1.000000
+bit_level:1.000000
+adderposition:8.000000
+pulseposition:0.000000
+linetech:0.000000
+celltype:90.000000
+xbarsize:1.000000
